@@ -4,6 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * This class is used to manage to a MySQL table.
+ * @author Killarexe
+ */
 public class Table {
 
     private String name;
@@ -11,6 +15,12 @@ public class Table {
     private Statement statement;
     private Property[] properties;
 
+    /**
+     * Constructor.
+     * @param name The name of the table.
+     * @param database The database the table is in.
+     * @param properties The properties of the table.
+     */
     public Table(String name, Database database, Property[] properties){
         this.name = name;
         this.database = database;
@@ -18,6 +28,10 @@ public class Table {
         this.statement = database.getStatement();
     }
 
+    /**
+     * Get the name of the table.(This constructor is used to get a table from a database).
+     * @return The name of the table.
+     */
     public Table(String name, Database database){
         this.name = name;
         this.database = database;
@@ -25,6 +39,10 @@ public class Table {
         this.properties = getPropertiesByRequest();
     }
 
+    /**
+     * Create a table. If is already exist nothing will happen.
+     * @return The table
+     */
     public int createTable(){
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE IF NOT EXISTS ");
@@ -68,6 +86,11 @@ public class Table {
         return -1;
     }
 
+    /**
+     * Insert a row in the table. If the row is already exist nothing will happen.
+     * @param values
+     * @return The error code. If the error code is 0, the row was inserted.
+     */
     public int insert(Object... values){
         String query = "INSERT INTO " + name + " (";
         for(int i = 0; i < properties.length; i++){
@@ -92,6 +115,10 @@ public class Table {
         return -1;
     }
 
+    /**
+     * Change a row in the table.
+     * @return The error code. If the error code is 0, the row was changed.
+     */
     public int update(Object[] values, String condition){
         String query = "UPDATE " + name + " SET ";
         for(int i = 0; i < properties.length; i++){
@@ -109,6 +136,10 @@ public class Table {
         return -1;
     }
 
+    /**
+     * Delete a row from a table.
+     * @return The error code.
+     */
     public int delete(String condition){
         String query = "DELETE FROM " + name + " WHERE " + condition;
         try {
@@ -119,6 +150,10 @@ public class Table {
         return -1;
     }
 
+    /**
+     * Drop the table. If it doesn't exist an error will be printed.
+     * @return The error code.
+     */
     public int drop(){
         String query = "DROP TABLE " + name;
         try {
